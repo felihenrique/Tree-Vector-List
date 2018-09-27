@@ -11,6 +11,7 @@ import java.util.List;
 /**
  *
  * @author fernando
+ * @param <T>
  */
 public class Node<T> {
     private T data = null;
@@ -67,3 +68,6 @@ public class Node<T> {
         return parent == father.index;
     }
 }
+
+
+

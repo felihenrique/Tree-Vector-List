@@ -1,78 +1,117 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package treelist;
 
 import java.util.*;
 
 /**
  *
- * @author fernando
+ * @authors Thyago, Jessiele, Philipe e Fernando.
+ *
+ * Essa classe implementa uma árvore genérica usando uma lista linear de nós.
+ * Cada nó usa internamente uma lista encadeada para armazenar seus filhos.
  */
 public class TreeList<T> {
-    ArrayList< Node<T> > nodes;
-    
+
+    ArrayList< Node<T>> nodes;
+    Stack<Integer> emptySlots;
+
+    /**
+     * Construtor
+     */
     public TreeList() {
         this.nodes = new ArrayList<>();
+        this.emptySlots = new Stack<>();
     }
-    
-    public ArrayList< Node<T> > searchNode(T data){
-        ArrayList< Node<T> > found = null;
-        for(Node<T> no : nodes) {
-            if(no.getData() == data) {
-               found.add(no);
+
+    /**
+     * Busca por um valor na árvore
+     *
+     * @param data O valor a ser buscado
+     * @return Uma lista de nós que tem o valor buscado
+     */
+    public ArrayList< Node<T>> searchNode(T data) {
+        ArrayList< Node<T>> found = new ArrayList<>();
+        for (Node<T> no : nodes) {
+            if (no.getData() == data) {
+                found.add(no);
             }
         }
         return found;
     }
-    
-    
-    public void addNode(Node<T> no, T parent){
-        int i = 1;
-        ArrayList< Node<T> > possibleParents = searchNode(parent);
-        if(possibleParents.isEmpty()) {
-            System.out.println("Parent not found!");
-        } else {
-            for(Node<T> no : possibleParents) {
-                System.out.println(i + " data " + no.getData() + "\nParent: " + no.getParent());
-                i++;
-            }
-            System.out.println("Choose the parent: ");
-            Scanner readParent = new Scanner(System.in);
-            nodes.add(possibleParents.hashCode(readParent.nextInt()-1));
-            
+
+    /**
+     * Adiciona um nó na árvore
+     *
+     * @param node O nó a ser adicionado
+     * @param paren O pai do nó
+     */
+    public void addNode(Node<T> node, Node<T> paren) {
+        if (paren != null) {
+            paren.addChild(node);
         }
-                
+        if (emptySlots.empty()) {
+            nodes.add(node);
+            node.index = nodes.size() - 1;
+        } else {
+            int slot = emptySlots.pop();
+            nodes.set(slot, node);
+            node.index = slot;
+        }
+        node.tree = this;
     }
     
-    //public void removeNode(Node<T> no){
-        
-    //}
+    public void addNode(T value, Node<T> paren) {
+        Node<T> node = new Node<>(value);
+        this.addNode(node, paren);
+    }
 
+    /**
+     * Remove um nó da árvore
+     * @param no 
+     */
+    public void removeNode(Node<T> no) {
+        if (no.index == 0) {
+            nodes.clear();
+            emptySlots.clear();
+            return;
+        }
+
+        while (!no.ifLeaf()) {
+            removeNode(no.getChildren().get(no.getChildren().size() - 1));
+        }
+        no.getParent().getChildren().remove(no);
+        removeLeaf(no.index);
+        no.clear();
+    }
+
+    private void removeLeaf(int index) {
+        emptySlots.add(index);
+        nodes.set(index, null);
+
+    }
     
-    //public getRoot(){}
-    
-    //public getHeight(){}
-    
-    //public addNode(Node<T> no){}
-    
-    //public removeNode(Node<T> no){}
-    
-    //public searchNode(Node<T> no){}
-    
+    /**
+     * Retorna a altura da árvore
+     * @return 
+     */
+    public int getHeight() {
+        int maior = 0;
+        for (Node<T> no : nodes) {
+            if (no.getDepth() > maior) {
+                maior = no.getDepth();
+            }
+        }
+        return maior;
+    }
+
+    /**
+     * Retorna o nó raiz da árvore
+     *
+     * @return O nó raiz
+     */
+    public Node<T> getRoot() {
+        return nodes.size() > 0 ? nodes.get(0) : null;
+    }
+
     // Saber descendentes
     // Buscar descendentes
-    
-    
-    
-    public static void main(String[] args) {
-        
-    }
-
-    private void foreach() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
 }

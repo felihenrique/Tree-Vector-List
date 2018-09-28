@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package treelist;
 
-import java.util.ArrayList;
-import java.util.List;
-//package treelist;
+import java.util.*;
 
 /**
  *
@@ -14,59 +13,113 @@ import java.util.List;
  * @param <T>
  */
 public class Node<T> {
-    private T data = null;
- 
-    private List<Integer> children = new ArrayList<>();
-       
-    private int index;
-    private int parent;
+    private T data;
+    private List<Node<T>> children;
     private int depth;
+    private Node<T> parent;
     
-    public Node(T data, int index, int parent) {
+    Integer index;
+    TreeList tree;
+    
+    /**
+     * Cria um nó
+     * @param data O valor do nó
+     */
+    public Node(T data) {
         this.data = data;
-        this.index = index;
-        this.parent = parent;
+        this.children = new LinkedList<>();
     }
 
-    public void addChild(Node<T> child) {
-        child.setParent(this);
-        this.children.add(child.index);
-        //return child;
+    void addChild(Node<T> child) {
+        child.parent = this;
+        child.depth = this.depth + 1;
+        this.children.add(child);
+    }
+    
+    void clear() {
+        depth = 0;
+        children.clear();
+        parent = null;
+        index = null;
     }
 
-//    public void addChildren(List<int> children) {
-//        children.forEach(each -> each.setParent(this));
-//        this.children.addAll(children);
-//    }
-
-    public List<Integer> getChildren() {
+    /**
+     * Retorna a lista de filhos.
+     * @return 
+     */
+    public List<Node<T>> getChildren() {
         return children;
     }
+    
+    /**
+     * Calcula e retorna o caminho para a raiz
+     * @return 
+     */
+    public ArrayList<Node<T>> getRootPath() {
+        ArrayList<Node<T>> path = new ArrayList<>();
+        Node<T> actual = this;
+        while(actual.parent != null) {
+            path.add(actual);
+            actual = actual.parent;
+        }
+        return path;
+    }
 
+    /**
+     * Retorna o dado do nó
+     * @return 
+     */
     public T getData() {
         return data;
     }
 
+    /**
+     * Modifica o dado do nó
+     * @param data O novo dado
+     */
     public void setData(T data) {
         this.data = data;
     }
 
-    private void setParent(Node<T> parent) {
-        this.parent = parent.index;
-        this.depth = parent.depth + 1;
-    }
-
-    public int getParent() {
+    /**
+     * Retorna o nó pai
+     * @return 
+     */
+    public Node<T> getParent() {
         return parent;
     }    
     
+    /**
+     * Retorna a profundidade do nó na árvore.
+     * @return 
+     */
     public int getDepth() {
         return depth;
     }
     
+    /**
+     * Verifica se o nó é filho de outro nó
+     * @param father Nó pai para ser verificado
+     * @return 
+     */
     public boolean isChildOf(Node<T> father) {
-        return parent == father.index;
+        return parent == father;
     }
+    
+    /**
+     * Verifica se o nó é folha.
+     * @return 
+     */
+    public boolean ifLeaf() {
+        return children.isEmpty();
+    }
+
+    @Override
+    public String toString() {
+        return data.toString();
+    }
+    
+    
 }
 
 

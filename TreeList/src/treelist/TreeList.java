@@ -58,7 +58,11 @@ public class TreeList<T> {
         }
         node.tree = this;
     }
-    
+    /**
+     * Adiciona um nó na árvore
+     * @param value O valor a ser adicionado.
+     * @param paren O nó pai
+     */
     public void addNode(T value, Node<T> paren) {
         Node<T> node = new Node<>(value);
         this.addNode(node, paren);

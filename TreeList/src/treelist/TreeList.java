@@ -45,7 +45,10 @@ public class TreeList<T> {
      * @param paren O pai do nó
      */
     public void addNode(Node<T> node, Node<T> paren) {
-        if (paren != null) {
+        if(getRoot() != null && paren == null) {
+            return;
+        }
+        else if (paren != null) {
             paren.addChild(node);
         }
         if (emptySlots.empty()) {

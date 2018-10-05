@@ -30,9 +30,10 @@ public class Program {
         tree.addNode(node6, node3);
         tree.addNode(node7, node2);
         
-        ArrayList<Node<Integer>> result1 = tree.searchNode(15);
-        ArrayList<Node<Integer>> result2 = tree.searchNode(10);
-        ArrayList<Node<Integer>> result3 = tree.searchNode(100);
+        Node<Integer> result1 = tree.bffSearch(15);
+        Node<Integer> result2 = tree.bffSearch(10);
+        Node<Integer> result3 = tree.bffSearch(100);
+        Node<Integer> result4 = tree.bffSearch(9);
         
         System.out.println("teste");
         

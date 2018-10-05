@@ -111,6 +111,27 @@ public class TreeList<T> {
     public Node<T> getRoot() {
         return nodes.size() > 0 ? nodes.get(0) : null;
     }
+    
+    public Node<T> bffSearch(T value) {
+        if(getRoot().getData() == value) {
+            return getRoot();
+        }
+        return this.bffSearchAuxiliar(getRoot().getChildren(), value);
+    }
+    
+    private Node<T> bffSearchAuxiliar(List<Node<T>> list, T data) {
+        if(list.isEmpty()) {
+            return null;
+        }
+        ArrayList<Node<T>> currentList = new ArrayList<>();
+        for(Node<T> node : list) {
+            if(node.getData() == data) {
+                return node;
+            }
+            currentList.addAll(node.getChildren());
+        }
+        return bffSearchAuxiliar(currentList, data);
+    }
 
     // Saber descendentes
     // Buscar descendentes
